@@ -3,13 +3,18 @@
 import subprocess
 import sys
 import os
-import soundcloud
 import io
 
 def main():
 
   modules = arg_parse()
+  if len(modules) == 0:
+    print("No python files found.")
+    return
   modules = get_pip_modules(modules)
+  if len(modules) == 0:
+    print("No need of 'requirements.txt', you're only using the standard lib.")
+    return
   write_requirements(modules)
   print("'requirements.txt' file has been written.")
 
@@ -124,7 +129,10 @@ def read_file(fi):
   """
 
   modules = {}
-  lines = fi.readlines()
+  try:
+    lines = fi.readlines()
+  except:
+    return {}
   for line in lines:
     if line.find('import ') != -1 and line.find('(') == -1 and len(line.split(' ')) > 1:
       modules.update({line.split(' ')[1].rstrip(): ''})
