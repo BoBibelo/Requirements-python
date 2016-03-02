@@ -135,7 +135,8 @@ def read_file(fi):
     return {}
   for line in lines:
     if line.find('import ') != -1 and line.find('(') == -1 and len(line.split(' ')) > 1:
-      modules.update({line.split(' ')[1].rstrip(): ''})
+      module = line.split(' ')[1].split('.')[0].rstrip()
+      modules.update({ module: '' })
   return modules
 
 if __name__ == '__main__':
